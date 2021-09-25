@@ -1,21 +1,44 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createCardAsynchThunk } from "../../redux/actions/categoryAction";
+import {
+  categoriesAsyncThunk,
+  imagesAsyncThunk,
+} from "../../redux/actions/categoryAction";
+import { category } from "../../redux/selector/rootSelectors";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink,
+} from "react-router-dom";
 
 const Sidebar = () => {
-  const categoryState = useSelector((state) => state.categories);
   const dispatch = useDispatch();
+  const { categories, route } = useSelector((state) =>  state);
 
+  const category = categories.map((category) => (
+    <li key={category.id} className="Link">
+      <NavLink
+        onClick={() => dispatch(imagesAsyncThunk(1, category.id))}
+        className="categorieslink"
+        to={`/cats/${route.id}/${category.id}`}
+      >
+        {category.name}
+      </NavLink>
+    </li>
+  ));
 
   useEffect(() => {
-    dispatch(createCardAsynchThunk());
+    dispatch(categoriesAsyncThunk());
   }, []);
 
   return (
     <div>
-      {categoryState.map((card) => (
-        <div key={card.id}>{card.name}</div>
-      ))}
+      <Router>
+        <div>
+          <ul className="category_list">{category}</ul>
+        </div>
+      </Router>
     </div>
   );
 };

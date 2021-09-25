@@ -1,27 +1,50 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createImagesAsynchThunk } from "../../redux/actions/categoryAction";
+import { useParams } from "react-router";
+import { NavLink } from "react-router-dom";
+import { imagesAsyncThunk, moreCats } from "../../redux/actions/categoryAction";
+import "./Images.scss";
 
 const Images = () => {
-  const imageState = useSelector((state) => state.images);
+  const { page, id } = useParams();
+  let flag = window.location.pathname === "/";
+  const [pageNum, setPageNum] = useState({ page: page || 1, id: id || 1 });
+  const imageState = useSelector((state) => state.cats);
   const dispatch = useDispatch();
-  console.log(imageState);
 
   useEffect(() => {
-    dispatch(createImagesAsynchThunk());
-  }, []);
+    dispatch(imagesAsyncThunk(page, id));
+  }, [page, id]);
+
+  const addMoreCats = () => {
+    const { id, page } = pageNum;
+    dispatch(moreCats(id, page));
+  };
 
   return (
-    <div>
-      {imageState.map((image) => (
-        <div className="image_container" key={image.id}>
-          <div className="image_container__cards">
-            <img src={image.url} alt={image.name} />
-            <div className="image_container__name">{image.name}</div>
+    <>
+      <div className="image">
+        {imageState.map((image) => (
+          <div className="image__image_container" key={image.id}>
+            <div className="image__cards">
+              <img className="image__img" src={image.url} alt={image.name} />
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+      {!flag ? (
+        <NavLink to={`/cats/${page}/${id}`}>
+          <button
+            className="add_more_cats"
+            onClick={() => {
+              addMoreCats();
+            }}
+          >
+            Add More Cats
+          </button>
+        </NavLink>
+      ) : null}
+    </>
   );
 };
 

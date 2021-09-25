@@ -1,7 +1,46 @@
+.page {
+  display: flex;
+  background-color: #181818;
+}
 .page__sidebar {
   display: flex;
-  background-color: red;
-  width: 300px;
-  height: 600px;
+  // position: sticky;
   align-items: center;
+  justify-content: space-between;
+  background-color: #3f3f3f;
+  min-width: 15%;
+  height: 100vh;
+  color: white;
+  .page__sidebar__items {
+    margin: 0 auto;
+  }
+}
+li {
+  list-style-type: none;
+}
+a {
+  display: block;
+  font-size: 30px;
+  padding-bottom: 20px;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1200px) {
+  a {
+    font-size: 20px;
+    transition: 0.5s ease;
+  }
+}
+@media (max-width: 768px) {
+  a {
+    font-size: 15px;
+    transition: 0.5s ease;
+  }
+}
+@media (max-width: 640px) {
+  .page__sidebar {
+    display: none;
+  }
 }
